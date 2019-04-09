@@ -2,8 +2,8 @@
 a ros package of multi agent.
 
 
-1 创建一个ros包（可编译)
-
+1 创建一个ros包（可编译)  
+`catkin_create_pkg mini_multi_agent roscpp std_msgs`
 
 2 将第一个节点命名为`node_mini_factory_server`，并创建一个topic订阅(命名为"/agent_feedback"),用于接收agent反馈信息  
 [topic in roscpp][1]
