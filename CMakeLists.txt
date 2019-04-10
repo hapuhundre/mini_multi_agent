@@ -158,6 +158,10 @@ add_executable(node_robot_1 src/node_robot_1.cpp )
 add_dependencies(node_robot_1 mini_multi_agent_generate_messages_cpp)
 target_link_libraries(node_robot_1 ${catkin_LIBRARIES})
 
+add_executable(node_robot_2 src/node_robot_2.cpp )
+add_dependencies(node_robot_2 mini_multi_agent_generate_messages_cpp)
+target_link_libraries(node_robot_2 ${catkin_LIBRARIES})
+
 add_executable(node_mini_factory_server src/node_mini_factory_server.cpp )
 add_dependencies(node_mini_factory_server mini_multi_agent_generate_messages_cpp)
 target_link_libraries(node_mini_factory_server ${catkin_LIBRARIES})
