@@ -8,7 +8,7 @@ a mini multi agent system by using roscpp
 
 ## 运行结果
 
-![1555080956774](imgs\running_result.png)
+![](imgs\running_result.png)
 
 
 ## 描述
