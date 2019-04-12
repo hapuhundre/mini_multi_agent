@@ -61,7 +61,8 @@ add_message_files(FILES feedback.msg)
 #   Service1.srv
 #   Service2.srv
 # )
-add_service_files(FILES task.srv)
+add_service_files(FILES task.srv task1.srv task2.srv)
+
 
 ## Generate actions in the 'action' folder
 # add_action_files(
