@@ -8,7 +8,7 @@ a mini multi agent system by using roscpp
 
 ## 运行结果
 
-![][imgs/running_result.png]
+![](https://github.com/hapuhundre/mini_multi_agent/blob/master/imgs/running_result.png)
 
 
 ## 描述
