@@ -14,7 +14,7 @@ struct RobotAgent{
   int ID;
   int task_ID;
   bool finished;
-  string state; 
+  string state;
 };
 
 class FactoryServer{
@@ -23,10 +23,9 @@ public:
   void feedbackCallback(const mini_multi_agent::feedback::ConstPtr &msg);
   bool runRobotTask1(ros::ServiceClient& client1,int task_ID);
   bool runRobotTask2(ros::ServiceClient& client2,int task_ID);
-  void taskScheduler();
-  void updateState(){
-    sub = n.subscribe("/agent_feedback", 1, &FactoryServer::feedbackCallback, this);
-  }
+  void taskScheduler1();
+  void taskScheduler2();
+
   ~FactoryServer(){}
 
 private:
@@ -42,7 +41,7 @@ private:
 
 FactoryServer::FactoryServer(){
   // 
-  
+  sub = n.subscribe("/agent_feedback", 1, &FactoryServer::feedbackCallback, this);
   client1 = n.serviceClient<mini_multi_agent::task1>("/agent_task_1");
   client2 = n.serviceClient<mini_multi_agent::task2>("/agent_task_2");
   robot1 = {ID:1, task_ID:0,finished:false,state:"ready"};
@@ -70,6 +69,7 @@ bool FactoryServer::runRobotTask1(ros::ServiceClient& client1,int task_ID){
     {
       ROS_INFO("Response from server: %s", srv1.response.feedback.c_str());
       robot1.state = "executing";
+      ros::Duration(5).sleep();
       return true;
     }
     else{
@@ -85,6 +85,7 @@ bool FactoryServer::runRobotTask2(ros::ServiceClient& client2,int task_ID){
     {
       ROS_INFO("Response from server: %s", srv2.response.feedback.c_str());
       robot2.state = "executing";
+      ros::Duration(3).sleep();
       return true;
     }
     else{
@@ -93,7 +94,7 @@ bool FactoryServer::runRobotTask2(ros::ServiceClient& client2,int task_ID){
     }
 }
 
-void FactoryServer::taskScheduler()
+void FactoryServer::taskScheduler1()
 {
 
   if(robot1.task_ID>=5) robot1.finished = true;
@@ -105,18 +106,33 @@ void FactoryServer::taskScheduler()
     ros::shutdown();
   }
 
-  sub = n.subscribe("/agent_feedback", 1, &FactoryServer::feedbackCallback, this);
-
   if(robot1.state=="ready" && !robot1.finished){
     robot1.task_ID++;
     runRobotTask1(client1,robot1.task_ID);
     ros::Duration(0.5).sleep();
   }
-  if(robot2.state=="ready" && !robot2.finished){
+  else if(robot2.state=="ready" && !robot2.finished){
     robot2.task_ID++;
     runRobotTask2(client2,robot2.task_ID);
     ros::Duration(0.5).sleep();        
   }
+}
+
+void FactoryServer::taskScheduler2()
+{
+  if(robot1.task_ID>=5) robot1.finished = true;
+  if(robot2.task_ID>=5) robot2.finished = true;
+
+  if(robot1.finished && robot2.finished)
+  {
+    ROS_INFO("All task is finished.");
+    ros::shutdown();
+  }
+  
+
+  
+  
+
 }
 
 
@@ -141,7 +157,7 @@ int main(int argc, char **argv)
   ros::Rate loop_rate(100);
 	while(ros::ok()){
     // server.updateState();
-		server.taskScheduler();
+		server.taskScheduler1();
 		loop_rate.sleep();
 		ros::spinOnce();
 	}
